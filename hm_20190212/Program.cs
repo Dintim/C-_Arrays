@@ -11,7 +11,35 @@ namespace hm_20190212
     {
         static void Main(string[] args)
         {
-            exmpl13();
+            exmplForSnickers();
+        }
+
+        static void exmplForSnickers()
+        {
+            //Дана строка символов, состоящая из цифр от 0 до 9 и пробелов. 
+            //Группы цифр, разделенные пробелами (одним или несколькими) и не содержащие пробелов внутри себя, будем называть словами. 
+            //Рассматривая эти слова как числа, определить и напечатать сумму чисел, оканчивающихся на цифры 3 или 4
+            string str = "1233 23356 78888   5787 4454 45676     3424 7883";
+            while (str.Contains("  "))
+            {
+                str=str.Replace("  ", " ");
+            }
+
+            string[] words = str.Split(' ');
+
+            List<int> numbers = new List<int>();
+            for (int i = 0; i < words.Length; i++)
+            {
+                numbers.Add(Convert.ToInt32(words[i]));
+            }
+
+            int sum = 0;
+            for(int i=0; i<numbers.Count; i++)
+            {
+                if (numbers[i] % 10 == 3 || numbers[i] % 10 == 4)
+                    sum += numbers[i];
+            }
+            Console.WriteLine("сумма чисел, оканчивающихся на цифры 3 или 4, = {0}", sum);
         }
 
         static void exmpl01()
@@ -266,68 +294,91 @@ namespace hm_20190212
 
         static void exmpl13()
         {
-            //•	Удалить те столбцы, в которых встречается хотя бы два одинаковых элемента
-            int[,] arr = new int[5,5];
+            //•	Удалить те столбцы, в которых встречается хотя бы два одинаковых элемента           
             Random rnd = new Random();
-            
+            List<List<int>> arr = new List<List<int>>();
             for(int i=0; i<5; i++)
             {
-                //List<int> tmp = new List<int>();
-                for (int j = 0; j < 5; j++)
+                List<int> tmp = new List<int>();
+                for (int j=0; j<5; j++)
                 {
-                    arr[i,j]=rnd.Next(0, 10);                    
+                    tmp.Add(rnd.Next(0, 20));
                 }
-                //arr.Add(tmp);                
+                arr.Add(tmp);
             }
 
-            for(int i=0; i<5;i++)
+            for(int i=0; i<5; i++)
             {
                 for (int j = 0; j < 5; j++)
-                    Console.Write("{0}\t", arr[i,j]);
+                    Console.Write("{0}\t", arr[i][j]);
                 Console.WriteLine();
             }
 
             List<int> t = new List<int>();
-            for (int i=0; i<5;i++)
+            for(int i=0; i<5; i++)
             {
-                for(int j=0; j<5;j++)
+                for(int j=0; j<5; j++)
                 {
                     int k = 0;
-                    for (int h=j+1; h<5;h++)
+                    for(int h=j+1; h<5; h++)
                     {
-                        if (arr[j,i] == arr[h,i])
+                        if (arr[j][i] == arr[h][i])
                             k++;
                     }
                     if (k != 0)
-                        t.Add(i);                        
+                        t.Add(i);
+                }
+            }
+            List<int> tt = new List<int>();
+            tt.Add(t[0]);
+            for(int i=1; i<t.Count; i++)
+            {
+                if (!tt.Contains(t[i]))
+                    tt.Add(t[i]);
+            }
+            
+            //Console.WriteLine("-----------------------------------");
+            //for (int i = 0; i < tt.Count; i++)
+            //    Console.Write("{0}\t", tt[i]);
+
+            for(int i=0; i<5; i++)
+            {
+                if (tt.Count != 0)
+                {
+                    for (int h = tt.Count - 1; h >= 0; h--)
+                    {
+                        arr[i].RemoveAt(tt[h]);
+                    }                    
                 }
             }
 
-            //int[,] arr2 = new int[5, 5 - t.Count];
-            //for (int i = 0; i < 5; i++)
-            //{
-            //    for (int j = 0; j < 5; j++)
-            //    {
-            //        for(int h=0; h<t.Count; h++)
-            //        {
-            //            if (j!=h)
-            //            {
-            //                arr2.SetValue(arr[i, j], j);
-            //            }
-            //        }
-            //    }
-            //}
+            Console.WriteLine("-----------------------------------");
+            for (int i = 0; i < 5; i++)
+            {
+                for (int j = 0; j < 5 - tt.Count; j++)
+                    Console.Write("{0}\t", arr[i][j]);
+                Console.WriteLine();
+            }
+        }
 
-            //Console.WriteLine("новая матрица:");
-            //for (int i = 0; i < 5; i++)
-            //{
-            //    for (int j = 0; j < 5 - t.Count; j++)
-            //        Console.Write("{0}\t", arr[i,j]);
-            //    Console.WriteLine();
-            //}
+        static void exmpl14()
+        {
+            //•	Написать программу, которая считывает символы с клавиатуры, пока не будет введена точка. 
+            //Программа должна сосчитать количество введенных пользователем пробелов. (Подсказка. IF, Length)
 
+            string str = "";
+            char ch=new char();
+            int k = 0;
+            while (ch!='.')
+            {
+                ch = Console.ReadKey().KeyChar;
+                if (ch == ' ')
+                    k++;
+                str += ch;                
+            }
 
-
+            Console.WriteLine("\n{0}", str);
+            Console.WriteLine("кол-во пробелов = {0}", k);
         }
     }
 }
